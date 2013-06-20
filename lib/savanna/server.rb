@@ -10,8 +10,7 @@ class Savanna::Server
       end
 
       map "/assets" do
-        assets = ::Savanna::Assets.new root: root_path
-        assets.sprockets
+        assets = Savanna::Assets.new root_path: root_path
         run assets.sprockets
       end
     }
