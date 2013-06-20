@@ -16,6 +16,17 @@ Or install it yourself as:
 
     $ gem install savanna
 
+## Usage
+
+execute this:
+
+    $ savanna
+
+then open localhost:8080 or execute this:
+
+    $ open http://localhost:8080
+
+
 ## Contributing
 
 1. Fork it

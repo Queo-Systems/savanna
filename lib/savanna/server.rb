@@ -1,12 +1,16 @@
 require "rack"
 class Savanna::Server
   def initialize
-    puts [Dir.pwd,'www']
+    root_path = Dir.pwd
     @app = Rack::Builder.new {
-      use Rack::Static, :urls => [""], :root => File.expand_path([Dir.pwd,'www'].join('/')), :index => 'index.html'
+
+      map "/" do
+        use Rack::Static, :urls => [""], :root => File.expand_path([root_path,'www'].join('/')), :index => 'index.html'
+        run lambda {|*|}
+      end
 
       map "/assets" do
-        assets = ::Savanna::Assets.new
+        assets = ::Savanna::Assets.new root: root_path
         assets.sprockets
         run assets.sprockets
       end

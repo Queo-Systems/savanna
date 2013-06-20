@@ -6,9 +6,10 @@ require "sprockets-sass"
 require "sprockets-helpers"
 
 class Savanna::Assets
-  attr_accessor :sprockets
+  attr_accessor :sprockets, :root_path
 
-  def initialize
+  def initialize(options)
+    @root_path = options[:root_path]
     @sprockets = Sprockets::Environment.new { |env| env.logger = Logger.new(STDOUT) }
 
     @sprockets.append_path "assets/javascripts"
