@@ -1,0 +1,3 @@
+#!/usr/bin/env ruby
+require "savanna"
+Rack::Server.start app: Savanna::Server.new.to_app
