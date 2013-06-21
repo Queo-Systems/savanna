@@ -7,4 +7,4 @@ require "bundler"
 module Savanna
 end
 
-Bundler.require(:default)
+Bundler.require(:default) if File.exists?('Gemfile')

@@ -3,7 +3,6 @@ require 'coffee-script'
 require "compass"
 require "sprockets"
 require "sprockets-sass"
-require "sprockets-helpers"
 
 class Savanna::Assets
   ASSET_PATH = []
@@ -31,11 +30,6 @@ class Savanna::Assets
       add_append_path [path, 'vendor'].join('/')
     }
 
-    Sprockets::Helpers.configure do |config|
-      config.environment = @sprockets
-      config.prefix      = "/#{ASSET_DIR}"
-      config.digest      = false
-    end
   end
 
 protected
