@@ -15,6 +15,13 @@ And then execute:
 Or install it yourself as:
 
     $ gem install savanna
+    
+Make these directories and put your stuff:
+
+    assets/javascripts
+    assets/stylesheets
+    assets/images
+    www (put static html)
 
 ## Usage
 
