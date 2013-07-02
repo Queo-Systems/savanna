@@ -15,7 +15,7 @@ And then execute:
 Or install it yourself as:
 
     $ gem install savanna
-    
+
 Make these directories and put your stuff:
 
     assets/javascripts
@@ -32,6 +32,12 @@ execute this:
 then open localhost:8080 or execute this:
 
     $ open http://localhost:8080
+
+to make precompiled assets
+
+    $ savanna precompile
+
+it should make compressed javascript, css assets and copy images in the `www/assets` directory.
 
 
 ## Contributing
