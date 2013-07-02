@@ -1,5 +1,6 @@
 require "rack"
 class Savanna::Server
+
   def initialize
     root_path = Dir.pwd
     @app = Rack::Builder.new {

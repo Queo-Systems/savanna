@@ -1,4 +1,9 @@
 #!/usr/bin/env ruby
 require "savanna"
 require "rack"
-Rack::Server.start app: Savanna::Server.new.to_app
+
+case ARGV[0]
+  when 'start' then Savanna.start_server
+  when 'precompile' then Savanna.precompile_assets
+  else Savanna.start_server
+end

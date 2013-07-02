@@ -28,5 +28,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'compass'
   spec.add_dependency 'coffee-script'
   spec.add_dependency 'ejs'
+  spec.add_dependency 'yui-compressor'
+  spec.add_dependency 'uglifier'
 
 end
