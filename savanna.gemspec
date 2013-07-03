@@ -23,6 +23,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'rack'
   spec.add_dependency 'sprockets'
   spec.add_dependency 'sprockets-sass'
+  spec.add_dependency 'sprockets-helpers'
   spec.add_dependency 'sass'
   spec.add_dependency 'compass'
   spec.add_dependency 'coffee-script'

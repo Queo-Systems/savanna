@@ -2,6 +2,7 @@ require "sass"
 require 'coffee-script'
 require "compass"
 require "sprockets"
+require "sprockets-helpers"
 require "sprockets-sass"
 require "yui/compressor"
 require "uglifier"
@@ -19,19 +20,23 @@ class Savanna::Assets
 
   def initialize(options)
     @root_path = options[:root_path]
-    @sprockets = Sprockets::Environment.new { |env| env.logger = Logger.new(STDOUT) }
+    @sprockets = Sprockets::Environment.new do |env|
+      env.logger = Logger.new(STDOUT)
 
-    add_append_path @root_path
+      define_children_directories [@root_path] + ASSET_PATH do |path|
+        env.append_path path
+      end
 
-    ASSET_PATH << @root_path
-    ASSET_PATH.each do |path|
-      add_append_path [path, 'app'].join('/')
-      add_append_path [path, 'vendor'].join('/')
-    end
+      Sprockets::Helpers.configure do |config|
+        config.environment = env
+        config.prefix      = "/#{ASSET_DIR}"
+        config.digest      = false
+      end
 
-    if options[:precompile]
-      @sprockets.css_compressor = ::YUI::CssCompressor.new
-      @sprockets.js_compressor  = ::Uglifier.new mangle: true
+      if options[:precompile]
+        env.css_compressor = ::YUI::CssCompressor.new
+        env.js_compressor  = ::Uglifier.new mangle: true
+      end
     end
   end
 
@@ -48,6 +53,7 @@ class Savanna::Assets
 
     precompile_files.each do |file|
       asset       = @sprockets[file]
+      raise FileNotFound.new file if asset.nil?
       output_file = Pathname.new(output_dir).join file
       FileUtils.mkdir_p output_file.dirname
       asset.write_to output_file
@@ -70,7 +76,7 @@ class Savanna::Assets
       end
       raise EmptyPrecompileList if precompile_files.empty?
     else
-      raise FileNotFound
+      raise PrecompileFileNotFound
     end
 
     return precompile_files
@@ -79,10 +85,14 @@ class Savanna::Assets
 
 
 protected
-  def add_append_path (path, dir = 'assets')
-    puts "Appended path: #{[path, dir].join('/')}"
-    @sprockets.append_path [path, dir, "javascripts"].join('/')
-    @sprockets.append_path [path, dir, "images"].join('/')
-    @sprockets.append_path [path, dir, "stylesheets"].join('/')
+  def define_children_directories (paths, asset_dir = 'assets')
+    paths.each do |path|
+      ['', 'app', 'vendor'].each do |dir|
+        puts "Appended path: #{File.join(path, dir, asset_dir)}"
+        yield File.join(path, dir, asset_dir, "javascripts")
+        yield File.join(path, dir, asset_dir, "images")
+        yield File.join(path, dir, asset_dir, "stylesheets")
+      end
+    end
   end
 end
