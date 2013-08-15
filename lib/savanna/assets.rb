@@ -46,6 +46,7 @@ class Savanna::Assets
     image_dirs       = @sprockets.paths.select { |path| path =~ /\/images$/ }
 
     FileUtils.rm_rf output_dir
+    FileUtils.mkdir_p output_dir
 
     image_dirs.each do |image_dir|
       copy_images image_dir, to: output_dir
