@@ -2,7 +2,10 @@
 require "savanna"
 require "rack"
 
-case ARGV[0]
+method = ARGV[0]
+Dir.chdir ARGV[1] if ARGV[1]
+
+case method
   when 'start' then Savanna.start_server
   when 'precompile' then Savanna.precompile_assets
   else Savanna.start_server

@@ -34,7 +34,7 @@ class Savanna::Assets
       end
 
       if options[:precompile]
-        env.css_compressor = ::YUI::CssCompressor.new
+        env.css_compressor = :scss
         env.js_compressor  = ::Uglifier.new mangle: true
       end
     end
@@ -42,29 +42,34 @@ class Savanna::Assets
 
   def precompile
     precompile_files = load_precompile_files
-    output_dir       = File.join @root_path, 'www', 'assets'
-    image_dirs       = @sprockets.paths.select { |path| path =~ /\/images$/ }
+    @output_dir      = File.join @root_path, 'www', 'assets'
 
-    FileUtils.rm_rf output_dir
-    FileUtils.mkdir_p output_dir
+    FileUtils.rm_rf @output_dir
+    FileUtils.mkdir_p @output_dir
 
-    image_dirs.each do |image_dir|
-      copy_images image_dir, to: output_dir
-    end
+    copy_static_folders 'images', 'fonts'
 
     precompile_files.each do |file|
       asset       = @sprockets[file]
       raise FileNotFound.new file if asset.nil?
-      output_file = Pathname.new(output_dir).join file
+      output_file = Pathname.new(@output_dir).join file
       FileUtils.mkdir_p output_file.dirname
       asset.write_to output_file
     end
   end
 
-  def copy_images (original_dir, options)
-    FileUtils.cp_r Dir["#{original_dir}/*"], options[:to]
-  rescue
-    nil
+  def copy_static_folders(*folders)
+    dirs = []
+    folders.each do |folder|
+      dirs += @sprockets.paths.select { |path| path =~ /\/#{folder}$/ }
+    end
+    dirs.each do |dir|
+      begin
+        FileUtils.cp_r Dir["#{dir}/*"], @output_dir
+      rescue
+        nil
+      end
+    end
   end
 
   def load_precompile_files
@@ -90,6 +95,7 @@ protected
     paths.each do |path|
       ['', 'app', 'vendor'].each do |dir|
         puts "Appended path: #{File.join(path, dir, asset_dir)}"
+        yield File.join(path, dir, asset_dir, "fonts")
         yield File.join(path, dir, asset_dir, "javascripts")
         yield File.join(path, dir, asset_dir, "images")
         yield File.join(path, dir, asset_dir, "stylesheets")
