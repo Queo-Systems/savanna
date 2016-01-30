@@ -6,9 +6,9 @@ require "rubygems"
 require "bundler"
 
 module Savanna
-    def self.start_server(options = {})
-    port = options[:port] || 8080
-    Rack::Server.start app: Savanna::Server.new.to_app, Port: port
+  def self.start_server(options = {})
+    port = options[:port] || ENV['PORT'] || 8080
+    Rack::Server.start app: Savanna::Server.new.to_app, Port: port, Host: ENV['IP']
   end
 
   def self.precompile_assets
