@@ -41,8 +41,10 @@ class Savanna::Assets
   end
 
   def precompile
+    puts "Assets.precompile"
     precompile_files = load_precompile_files
     @output_dir      = File.join @root_path, 'www', 'assets'
+    puts "Assets.precompile output_dir = #{@output_dir}"
 
     FileUtils.rm_rf @output_dir
     FileUtils.mkdir_p @output_dir
@@ -50,21 +52,25 @@ class Savanna::Assets
     copy_static_folders 'images', 'fonts'
 
     precompile_files.each do |file|
+      puts "#{file}"
       asset       = @sprockets[file]
       raise FileNotFound.new file if asset.nil?
       output_file = Pathname.new(@output_dir).join file
       FileUtils.mkdir_p output_file.dirname
       asset.write_to output_file
+      puts "    write to #{output_file}"
     end
   end
 
   def copy_static_folders(*folders)
+    puts "copy_static_folders..."
     dirs = []
     folders.each do |folder|
       dirs += @sprockets.paths.select { |path| path =~ /\/#{folder}$/ }
     end
     dirs.each do |dir|
       begin
+        puts "copy_static_folders... cp_r #{dir}/*  #{@output_dir}"
         FileUtils.cp_r Dir["#{dir}/*"], @output_dir
       rescue
         nil
