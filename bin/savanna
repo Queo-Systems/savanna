@@ -1,6 +1,12 @@
 #!/usr/bin/env ruby
+p "savanna start..."
 require "savanna"
+p "savanna bin loaded savanna"
 require "rack"
+p "savanna bin loaded rack"
+ARGV.each_with_index do |a, i|
+  p "ARGV[#{i}]=#{ARGV[i]}"
+end
 
 method = ARGV[0]
 Dir.chdir ARGV[2] if ARGV[2]
