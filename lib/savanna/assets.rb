@@ -40,7 +40,7 @@ class Savanna::Assets
         if @no_js_compression
           env.js_compressor = NoCompression.new
         else
-          env.js_compressor = ::Uglifier.new mangle: true
+          env.js_compressor = ::Uglifier.new(harmony: true, mangle: true) # mangle: true
         end
       end
     end
