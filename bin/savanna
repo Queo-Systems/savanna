@@ -10,13 +10,13 @@ no_js_compression = false
 ARGV.each_with_index do |a, i|
   #p "ARGV[#{i}]=#{ARGV[i]}"
   p "ARGV[#{i}]=#{a}"
-  a.strip!
-  if a.start_with? "-"
-    if a == "--no-js-compress"
+  trimArg = a.strip
+  if trimArg.start_with? "-"
+    if trimArg == "--no-js-compress"
       no_js_compression = true
     end
   else
-    args_no_switchs << a 
+    args_no_switchs << trimArg 
   end
 end
 
