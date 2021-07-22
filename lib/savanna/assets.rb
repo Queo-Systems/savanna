@@ -22,6 +22,7 @@ class Savanna::Assets
   def initialize(options)
     @root_path = options[:root_path]
     @no_js_compression = options[:no_js_compression]
+    p "Asset @no_js_compression = #{@no_js_compression}"
     @sprockets = Sprockets::Environment.new do |env|
       env.logger = Logger.new(STDOUT)
 
@@ -38,8 +39,10 @@ class Savanna::Assets
       if options[:precompile]
         env.css_compressor = :scss
         if @no_js_compression
+          p "no compression"
           env.js_compressor = NoCompression.new
         else
+          p "uglifier harmony true"
           env.js_compressor = ::Uglifier.new(harmony: true, mangle: true) # mangle: true
         end
       end

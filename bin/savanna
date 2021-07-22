@@ -19,6 +19,8 @@ ARGV.each_with_index do |a, i|
   end
 end
 
+p "savanna no_js_compression = #{no_js_compression}"
+
 #method = ARGV[0]
 #Dir.chdir ARGV[2] if ARGV[2]
 method = args_no_switchs[2]

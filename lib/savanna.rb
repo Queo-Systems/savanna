@@ -12,6 +12,7 @@ module Savanna
   end
 
   def self.precompile_assets(no_js_compression)
+    p "precompile_assets no_js_compression = #{no_js_compression}"
     assets = Savanna::Assets.new(root_path: Dir.pwd, precompile: true, no_js_compression: no_js_compression)
     assets.precompile
   end
