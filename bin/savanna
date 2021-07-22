@@ -24,7 +24,7 @@ p "savanna no_js_compression = #{no_js_compression}"
 
 #method = ARGV[0]
 #Dir.chdir ARGV[2] if ARGV[2]
-method = args_no_switchs[2]
+method = args_no_switchs[0]
 Dir.chdir args_no_switchs[2] if args_no_switchs[2]
 
 
