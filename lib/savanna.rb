@@ -11,8 +11,8 @@ module Savanna
     Rack::Server.start app: Savanna::Server.new.to_app, Port: port, Host: ENV['IP']
   end
 
-  def self.precompile_assets
-    assets = Savanna::Assets.new(root_path: Dir.pwd, precompile: true)
+  def self.precompile_assets(no_js_compression)
+    assets = Savanna::Assets.new(root_path: Dir.pwd, precompile: true, no_js_compression: no_js_compression)
     assets.precompile
   end
 end

@@ -4,15 +4,29 @@ require "savanna"
 p "savanna bin loaded savanna"
 require "rack"
 p "savanna bin loaded rack"
+args_no_switchs = []
+no_js_compression = false
+
 ARGV.each_with_index do |a, i|
   p "ARGV[#{i}]=#{ARGV[i]}"
+  ARGS[i].strip!
+  if ARGS[i].start_with? "-"
+    if ARGS[i] == "--no-js-compress"
+      no_js_compression = true
+    end
+  else
+    args_no_switchs << ARGS[i] 
+  end
 end
 
-method = ARGV[0]
-Dir.chdir ARGV[2] if ARGV[2]
+#method = ARGV[0]
+#Dir.chdir ARGV[2] if ARGV[2]
+method = args_no_switchs[2]
+Dir.chdir args_no_switchs[2] if args_no_switchs[2]
+
 
 case method
   when 'start' then Savanna.start_server port: ARGV[1]
-  when 'precompile' then Savanna.precompile_assets
+  when 'precompile' then Savanna.precompile_assets no_js_compression
   else Savanna.start_server
 end

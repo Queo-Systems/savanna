@@ -7,6 +7,7 @@ require "sprockets-sass"
 require "yui/compressor"
 require "uglifier"
 require "pathname"
+require 'nocompression'
 
 class Savanna::Assets
   ASSET_PATH = []
@@ -20,6 +21,7 @@ class Savanna::Assets
 
   def initialize(options)
     @root_path = options[:root_path]
+    @no_js_compression = options[:no_js_compression]
     @sprockets = Sprockets::Environment.new do |env|
       env.logger = Logger.new(STDOUT)
 
@@ -35,7 +37,11 @@ class Savanna::Assets
 
       if options[:precompile]
         env.css_compressor = :scss
-        env.js_compressor  = ::Uglifier.new mangle: true
+        if @no_js_compression
+          env.js_compressor = NoCompression.new
+        else
+          env.js_compressor = ::Uglifier.new mangle: true
+        end
       end
     end
   end
